@@ -1,127 +1,526 @@
  <!doctype html>
+
 <html lang="en">
-  <head>
+
+<head>
+
+    <!-- =====================================================
+         1. CHARACTER ENCODING
+         ===================================================== -->
+
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Agent Status Monitoring</title>
-    <link rel="stylesheet" href="../style.css" />
-  </head>
-  <body>
+
+
+    <!-- =====================================================
+         2. RESPONSIVE VIEWPORT
+         ===================================================== -->
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    />
+
+
+    <!-- =====================================================
+         3. PAGE TITLE
+         ===================================================== -->
+
+    <title>
+        Agent Status Monitoring
+    </title>
+
+
+    <!-- =====================================================
+         4. EXTERNAL CSS
+         ===================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../style.css"
+    />
+
+</head>
+
+
+<body>
+
+    <!-- =====================================================
+         5. LOAD JAVASCRIPT
+         ===================================================== -->
+
     <script src="../script.js"></script>
+
+
+    <!-- =====================================================
+         6. COMMON PAGE SHELL
+         
+         renderShell() creates:
+         - Sidebar
+         - Navigation
+         - Dark mode button
+         - Topbar
+         - Page heading
+         ===================================================== -->
+
     <script>
-      document.write(
-        renderShell(
-          'Agent Status Monitoring',
-          'Agent Status Monitoring',
-          'Monitor runtime health, availability, latency and agent load.'
-        )
-      );
+
+        document.write(
+
+            renderShell(
+                'Agent Status Monitoring',
+
+                'Agent Status Monitoring',
+
+                'Monitor runtime health, availability, latency and agent load.'
+            )
+
+        );
+
     </script>
+
+
+    <!-- =====================================================
+         7. STATUS SUMMARY
+         ===================================================== -->
 
     <div class="status-grid">
-      <div class="card status-box">
-        <span class="small muted">Online</span>
-        <strong id="online">8</strong>
-        <span class="small positive">Healthy</span>
-      </div>
 
-      <div class="card status-box">
-        <span class="small muted">Busy</span>
-        <strong id="busy">3</strong>
-        <span class="small" style="color: var(--warning);">Under load</span>
-      </div>
 
-      <div class="card status-box">
-        <span class="small muted">Offline / Error</span>
-        <strong id="offline">1</strong>
-        <span class="small negative">Needs attention</span>
-      </div>
-    </div>
+        <!-- ---------- ONLINE ---------- -->
 
-    <div class="grid grid-2" style="margin-top: 16px;">
-      <div class="card card-pad">
-        <div class="section-title">
-          <h2>Runtime health</h2>
-          <button class="btn" id="refresh">↻ Refresh</button>
-        </div>
-        <div id="health"></div>
-      </div>
+        <div class="card status-box">
 
-      <div class="card card-pad">
-        <div class="section-title">
-          <h2>System metrics</h2>
-          <span>Live snapshot</span>
+            <span class="small muted">
+                Online
+            </span>
+
+            <strong id="online">
+                8
+            </strong>
+
+            <span class="small positive">
+                Healthy
+            </span>
+
         </div>
 
-        <div class="metric"><strong>Average latency</strong><span>240 ms</span></div>
-        <div class="metric"><strong>Uptime</strong><span>99.94%</span></div>
-        <div class="metric"><strong>Requests / min</strong><span>186</span></div>
-        <div class="metric"><strong>CPU load</strong><span>42%</span></div>
-        <div class="metric"><strong>Memory usage</strong><span>61%</span></div>
-      </div>
+
+        <!-- ---------- BUSY ---------- -->
+
+        <div class="card status-box">
+
+            <span class="small muted">
+                Busy
+            </span>
+
+            <strong id="busy">
+                3
+            </strong>
+
+            <span
+                class="small"
+                style="color: var(--warning);"
+            >
+                Under load
+            </span>
+
+        </div>
+
+
+        <!-- ---------- OFFLINE ---------- -->
+
+        <div class="card status-box">
+
+            <span class="small muted">
+                Offline / Error
+            </span>
+
+            <strong id="offline">
+                1
+            </strong>
+
+            <span class="small negative">
+                Needs attention
+            </span>
+
+        </div>
+
     </div>
 
-    <div class="card card-pad" style="margin-top: 16px;">
-      <div class="section-title">
-        <h2>Status events</h2>
-        <span id="updated">Updated just now</span>
-      </div>
-      <div class="timeline" id="events"></div>
+
+    <!-- =====================================================
+         8. MAIN TWO-COLUMN SECTION
+         ===================================================== -->
+
+    <div
+        class="grid grid-2"
+        style="margin-top: 16px;"
+    >
+
+
+        <!-- =================================================
+             8A. RUNTIME HEALTH CARD
+             ================================================= -->
+
+        <div class="card card-pad">
+
+            <div class="section-title">
+
+                <h2>
+                    Runtime health
+                </h2>
+
+                <button
+                    class="btn"
+                    id="refresh"
+                >
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+
+            <!-- JavaScript inserts health information here -->
+
+            <div id="health"></div>
+
+        </div>
+
+
+        <!-- =================================================
+             8B. SYSTEM METRICS CARD
+             ================================================= -->
+
+        <div class="card card-pad">
+
+            <div class="section-title">
+
+                <h2>
+                    System metrics
+                </h2>
+
+                <span>
+                    Live snapshot
+                </span>
+
+            </div>
+
+
+            <div class="metric">
+
+                <strong>
+                    Average latency
+                </strong>
+
+                <span>
+                    240 ms
+                </span>
+
+            </div>
+
+
+            <div class="metric">
+
+                <strong>
+                    Uptime
+                </strong>
+
+                <span>
+                    99.94%
+                </span>
+
+            </div>
+
+
+            <div class="metric">
+
+                <strong>
+                    Requests / min
+                </strong>
+
+                <span>
+                    186
+                </span>
+
+            </div>
+
+
+            <div class="metric">
+
+                <strong>
+                    CPU load
+                </strong>
+
+                <span>
+                    42%
+                </span>
+
+            </div>
+
+
+            <div class="metric">
+
+                <strong>
+                    Memory usage
+                </strong>
+
+                <span>
+                    61%
+                </span>
+
+            </div>
+
+        </div>
+
     </div>
+
+
+    <!-- =====================================================
+         9. STATUS EVENTS
+         ===================================================== -->
+
+    <div
+        class="card card-pad"
+        style="margin-top: 16px;"
+    >
+
+        <div class="section-title">
+
+            <h2>
+                Status events
+            </h2>
+
+            <span id="updated">
+                Updated just now
+            </span>
+
+        </div>
+
+
+        <!-- JavaScript inserts timeline events here -->
+
+        <div
+            class="timeline"
+            id="events"
+        ></div>
+
+    </div>
+
+
+    <!-- =====================================================
+         10. PAGE-SPECIFIC JAVASCRIPT
+         ===================================================== -->
 
     <script>
-      const agents = [
-        ['Research Agent', 'Online', 96, 28],
-        ['Support Agent', 'Online', 94, 34],
-        ['Data Analyst', 'Busy', 91, 72],
-        ['Content Writer', 'Offline', 88, 0],
-        ['Finance Agent', 'Online', 98, 31],
-        ['QA Agent', 'Busy', 93, 67]
-      ];
 
-      function render() {
-        UI.$('#health').innerHTML = agents
-          .map(
-            (agent) => `
-              <div class="health-row">
-                <div>
-                  <span class="dot ${agent[1] === 'Busy' ? 'warning' : agent[1] === 'Offline' ? 'danger' : ''}"></span>
-                  <strong>${agent[0]}</strong>
-                  <div class="small muted">${agent[1]} · ${agent[3]}% load</div>
-                </div>
-                <div class="progress">
-                  <span style="width: ${agent[2]}%"></span>
-                </div>
-                <strong>${agent[2]}%</strong>
-              </div>
-            `
-          )
-          .join('');
 
-        UI.$('#events').innerHTML = [
-          ['Research Agent', 'Health check passed', '1 min ago'],
-          ['Data Analyst', 'Load crossed 70%', '4 min ago'],
-          ['Support Agent', 'Latency returned to normal', '7 min ago'],
-          ['Content Writer', 'Agent disconnected', '12 min ago']
-        ]
-          .map(
-            (event) => `
-              <div class="timeline-item">
-                <h4>${event[0]} — ${event[1]}</h4>
-                <p>${event[2]}</p>
-              </div>
-            `
-          )
-          .join('');
-      }
+        /* =================================================
+           10.1 AGENT DATA
+           ================================================= */
 
-      UI.$('#refresh').onclick = () => {
+        const agents = [
+
+            [
+                'Research Agent',
+                'Online',
+                96,
+                28
+            ],
+
+            [
+                'Support Agent',
+                'Online',
+                94,
+                34
+            ],
+
+            [
+                'Data Analyst',
+                'Busy',
+                91,
+                72
+            ],
+
+            [
+                'Content Writer',
+                'Offline',
+                88,
+                0
+            ],
+
+            [
+                'Finance Agent',
+                'Online',
+                98,
+                31
+            ],
+
+            [
+                'QA Agent',
+                'Busy',
+                93,
+                67
+            ]
+
+        ];
+
+
+        /* =================================================
+           10.2 RENDER FUNCTION
+           ================================================= */
+
+        function render() {
+
+
+            /* =============================================
+               RENDER RUNTIME HEALTH
+               ============================================= */
+
+            UI.$('#health').innerHTML = agents
+
+                .map(
+
+                    (agent) => `
+
+                        <div class="health-row">
+
+                            <div>
+
+                                <span
+                                    class="dot ${
+                                        agent[1] === 'Busy'
+                                            ? 'warning'
+                                            : agent[1] === 'Offline'
+                                                ? 'danger'
+                                                : ''
+                                    }"
+                                ></span>
+
+                                <strong>
+                                    ${agent[0]}
+                                </strong>
+
+                                <div class="small muted">
+                                    ${agent[1]} · ${agent[3]}% load
+                                </div>
+
+                            </div>
+
+
+                            <div class="progress">
+
+                                <span
+                                    style="width: ${agent[2]}%"
+                                ></span>
+
+                            </div>
+
+
+                            <strong>
+                                ${agent[2]}%
+                            </strong>
+
+                        </div>
+
+                    `
+
+                )
+
+                .join('');
+
+
+            /* =============================================
+               RENDER STATUS EVENTS
+               ============================================= */
+
+            UI.$('#events').innerHTML = [
+
+                [
+                    'Research Agent',
+                    'Health check passed',
+                    '1 min ago'
+                ],
+
+                [
+                    'Data Analyst',
+                    'Load crossed 70%',
+                    '4 min ago'
+                ],
+
+                [
+                    'Support Agent',
+                    'Latency returned to normal',
+                    '7 min ago'
+                ],
+
+                [
+                    'Content Writer',
+                    'Agent disconnected',
+                    '12 min ago'
+                ]
+
+            ]
+
+                .map(
+
+                    (event) => `
+
+                        <div class="timeline-item">
+
+                            <h4>
+                                ${event[0]} — ${event[1]}
+                            </h4>
+
+                            <p>
+                                ${event[2]}
+                            </p>
+
+                        </div>
+
+                    `
+
+                )
+
+                .join('');
+
+        }
+
+
+        /* =================================================
+           10.3 REFRESH BUTTON
+           ================================================= */
+
+        UI.$('#refresh').onclick = () => {
+
+
+            // Re-render monitoring information
+
+            render();
+
+
+            // Update timestamp
+
+            UI.$('#updated').textContent =
+                'Updated just now';
+
+
+            // Show notification
+
+            UI.toast(
+                'Monitoring data refreshed'
+            );
+
+        };
+
+
+        /* =================================================
+           10.4 INITIAL RENDER
+           ================================================= */
+
         render();
-        UI.$('#updated').textContent = 'Updated just now';
-        UI.toast('Monitoring data refreshed');
-      };
 
-      render();
     </script>
-  </body>
+
+</body>
+
 </html>
