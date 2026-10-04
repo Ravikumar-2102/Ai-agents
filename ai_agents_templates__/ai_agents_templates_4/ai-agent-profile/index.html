@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Agent Profile</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <script src="../script.js"></script>
+    <script>
+      document.write(
+        renderShell(
+          'AI Agent Profile',
+          'AI Agent Profile',
+          'Identity, capabilities, configuration and performance for a selected agent.'
+        )
+      );
+    </script>
+
+    <div class="grid grid-2">
+      <div class="card card-pad">
+        <div class="profile-hero">
+          <div class="profile-avatar" id="avatar">R</div>
+          <div>
+            <h2 id="heroName" style="margin: 0 0 5px;">Research Agent</h2>
+            <div id="heroStatus"></div>
+          </div>
+        </div>
+
+        <div class="tag-list" style="margin-top: 18px;">
+          <span class="tag">Research</span>
+          <span class="tag">Web Search</span>
+          <span class="tag">Summarization</span>
+          <span class="tag">Analysis</span>
+        </div>
+
+        <div class="metric"><strong>Model</strong><span>GPT-5.6</span></div>
+        <div class="metric"><strong>Created</strong><span>Sep 12, 2026</span></div>
+        <div class="metric"><strong>Last active</strong><span>2 minutes ago</span></div>
+      </div>
+
+      <div class="card card-pad">
+        <div class="section-title">
+          <h2>Agent configuration</h2>
+          <span>Saved locally</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Agent name</label>
+            <input id="name" />
+          </div>
+
+          <div class="field">
+            <label>Status</label>
+            <select id="status">
+              <option>Online</option>
+              <option>Busy</option>
+              <option>Offline</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label>Instructions</label>
+            <textarea id="instructions">You are a reliable research agent. Analyze requests, gather relevant information and return concise, well-structured answers.</textarea>
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top: 12px;">
+          <button class="btn btn-primary" id="save">Save changes</button>
+          <button class="btn" id="reset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top: 16px;">
+      <div class="card card-pad">
+        <div class="section-title">
+          <h2>Performance</h2>
+          <span>Current period</span>
+        </div>
+
+        <div class="status-grid">
+          <div class="status-box">
+            <span class="small muted">Success rate</span>
+            <strong>96%</strong>
+          </div>
+          <div class="status-box">
+            <span class="small muted">Executions</span>
+            <strong>482</strong>
+          </div>
+          <div class="status-box">
+            <span class="small muted">Avg latency</span>
+            <strong>1.8s</strong>
+          </div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div class="small muted">Success trend</div>
+          <div class="progress" style="margin-top: 8px;">
+            <span style="width: 96%;"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-pad">
+        <div class="section-title">
+          <h2>Recent activity</h2>
+          <span>Agent events</span>
+        </div>
+        <div class="timeline" id="activity"></div>
+      </div>
+    </div>
+
+    <script>
+      const selected = localStorage.getItem('selected_agent') || 'Research Agent';
+      const key = 'agentos_profile_' + selected;
+      const defaultConfig = {
+        name: selected,
+        status: 'Online',
+        instructions: 'You are a reliable research agent. Analyze requests, gather relevant information and return concise, well-structured answers.'
+      };
+      const saved = UI.load(key, defaultConfig);
+
+      function render() {
+        UI.$('#name').value = saved.name;
+        UI.$('#status').value = saved.status;
+        UI.$('#instructions').value = saved.instructions;
+        UI.$('#heroName').textContent = saved.name;
+        UI.$('#avatar').textContent = saved.name.slice(0, 1).toUpperCase();
+        UI.$('#heroStatus').innerHTML = `<span class="badge ${saved.status === 'Online' ? 'success' : saved.status === 'Busy' ? 'warning' : 'neutral'}">${saved.status}</span>`;
+        UI.$('#activity').innerHTML = [
+          ['Configuration updated', '3 minutes ago'],
+          ['Health check passed', '8 minutes ago'],
+          ['Completed RUN-1042', '14 minutes ago'],
+          ['Capabilities synchronized', '22 minutes ago']
+        ]
+          .map(
+            (event) => `
+              <div class="timeline-item">
+                <h4>${event[0]}</h4>
+                <p>${event[1]}</p>
+              </div>
+            `
+          )
+          .join('');
+      }
+
+      UI.$('#save').onclick = () => {
+        saved.name = UI.$('#name').value.trim() || selected;
+        saved.status = UI.$('#status').value;
+        saved.instructions = UI.$('#instructions').value;
+
+        localStorage.setItem('selected_agent', saved.name);
+        UI.save(key, saved);
+        UI.toast('Profile saved');
+        render();
+      };
+
+      UI.$('#reset').onclick = () => {
+        saved.name = selected;
+        saved.status = 'Online';
+        saved.instructions = defaultConfig.instructions;
+        render();
+        UI.toast('Changes reset');
+      };
+
+      render();
+    </script>
+  </body>
+</html>
+

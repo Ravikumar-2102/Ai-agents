@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Agent Dashboard</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <script src="../script.js"></script>
+    <script>
+      document.write(
+        renderShell(
+          'AI Agent Dashboard',
+          'AI Agent Dashboard',
+          'A unified overview of agent performance, health and workload.'
+        )
+      );
+    </script>
+
+    <div class="grid grid-4" id="stats"></div>
+
+    <div class="grid grid-2" style="margin-top: 16px;">
+      <div class="card card-pad">
+        <div class="section-title">
+          <h2>Agent health</h2>
+          <span>Live overview</span>
+        </div>
+        <div id="health"></div>
+      </div>
+
+      <div class="card card-pad">
+        <div class="section-title">
+          <h2>Recent activity</h2>
+          <span>Last 30 minutes</span>
+        </div>
+        <div class="timeline" id="activity"></div>
+      </div>
+    </div>
+
+    <div class="card card-pad" style="margin-top: 16px;">
+      <div class="section-title">
+        <h2>Execution trend</h2>
+        <span>Last 7 intervals</span>
+      </div>
+      <div class="bar-chart" id="chart"></div>
+    </div>
+
+    <script>
+      const agents = [
+        ['Research Agent', 'Online', 96],
+        ['Support Agent', 'Online', 94],
+        ['Data Analyst', 'Busy', 91],
+        ['Content Writer', 'Offline', 88]
+      ];
+
+      UI.$('#stats').innerHTML = [
+        ['Agents', '12', '+2 this week'],
+        ['Running', '4', '+1 today'],
+        ['Executions', '1,284', '+18%'],
+        ['Success', '94.2%', '+2.1%']
+      ]
+        .map(
+          (item) => `
+            <div class="card stat">
+              <div class="label">${item[0]}</div>
+              <div class="value">${item[1]}</div>
+              <div class="delta positive">${item[2]}</div>
+            </div>
+          `
+        )
+        .join('');
+
+      UI.$('#health').innerHTML = agents
+        .map(
+          (agent) => `
+            <div class="health-row">
+              <div>
+                <span class="dot ${agent[1] === 'Busy' ? 'warning' : agent[1] === 'Offline' ? 'danger' : ''}"></span>
+                <strong>${agent[0]}</strong>
+                <div class="small muted">${agent[1]}</div>
+              </div>
+              <div class="progress">
+                <span style="width: ${agent[2]}%"></span>
+              </div>
+              <strong>${agent[2]}%</strong>
+            </div>
+          `
+        )
+        .join('');
+
+      UI.$('#activity').innerHTML = [
+        ['Research Agent completed RUN-1042', '2 minutes ago · 18.4s'],
+        ['Data Analyst started RUN-1043', '7 minutes ago'],
+        ['Support Agent health check passed', '11 minutes ago'],
+        ['Content Writer went offline', '18 minutes ago']
+      ]
+        .map(
+          (event) => `
+            <div class="timeline-item">
+              <h4>${event[0]}</h4>
+              <p>${event[1]}</p>
+            </div>
+          `
+        )
+        .join('');
+
+      UI.$('#chart').innerHTML = [52, 68, 61, 82, 76, 91, 84]
+        .map(
+          (value, index) => `
+            <div class="bar" style="height: ${value}%">
+              <span>D${index + 1}</span>
+            </div>
+          `
+        )
+        .join('');
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Agent List</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <script src="../script.js"></script>
+    <script>
+      document.write(
+        renderShell(
+          'AI Agent List',
+          'AI Agent List',
+          'Search, filter and manage the agents in your workspace.'
+        )
+      );
+    </script>
+
+    <div class="card card-pad">
+      <div class="section-title">
+        <h2>Agent directory</h2>
+        <div class="toolbar">
+          <div class="search">
+            <span>⌕</span>
+            <input id="search" placeholder="Search agents" />
+          </div>
+          <select id="filter" class="btn">
+            <option value="All">All statuses</option>
+            <option>Online</option>
+            <option>Busy</option>
+            <option>Offline</option>
+          </select>
+          <button class="btn btn-primary" id="add">＋ New agent</button>
+        </div>
+      </div>
+
+      <div class="grid grid-2" id="agents"></div>
+    </div>
+
+    <script>
+      const key = 'agentos_agents_v2';
+      let data = UI.load(key, [
+        { name: 'Research Agent', status: 'Online', model: 'GPT-5.6', success: 96 },
+        { name: 'Support Agent', status: 'Online', model: 'GPT-5.6', success: 94 },
+        { name: 'Data Analyst', status: 'Busy', model: 'GPT-5.6', success: 91 },
+        { name: 'Content Writer', status: 'Offline', model: 'GPT-5.6', success: 88 }
+      ]);
+
+      function badge(status) {
+        return `<span class="badge ${status === 'Online' ? 'success' : status === 'Busy' ? 'warning' : 'neutral'}">${status}</span>`;
+      }
+
+      function render() {
+        const query = UI.$('#search').value.toLowerCase();
+        const filter = UI.$('#filter').value;
+        const rows = data.filter((agent) => {
+          const matchesStatus = filter === 'All' || agent.status === filter;
+          const searchable = `${agent.name} ${agent.model} ${agent.status}`.toLowerCase();
+          return matchesStatus && searchable.includes(query);
+        });
+
+        UI.$('#agents').innerHTML = rows.length
+          ? rows
+              .map(
+                (agent) => `
+                  <div class="card agent-card">
+                    <div class="agent-row">
+                      <div class="agent-avatar">${agent.name.slice(0, 1)}</div>
+                      <div class="agent-meta">
+                        <h3>${agent.name}</h3>
+                        <p>${agent.model} · ${agent.success}% success</p>
+                      </div>
+                      <div style="margin-left: auto;">${badge(agent.status)}</div>
+                    </div>
+                    <div class="card-footer">
+                      <span class="small muted">Agent health ${agent.success}%</span>
+                      <div class="toolbar">
+                        <button class="btn" onclick="openProfile('${encodeURIComponent(agent.name)}')">Profile</button>
+                        <button class="icon-btn" onclick="removeAgent('${encodeURIComponent(agent.name)}')">×</button>
+                      </div>
+                    </div>
+                  </div>
+                `
+              )
+              .join('')
+          : '<div class="empty" style="grid-column: 1 / -1;">No agents match your search.</div>';
+      }
+
+      function removeAgent(name) {
+        data = data.filter((agent) => agent.name !== decodeURIComponent(name));
+        UI.save(key, data);
+        render();
+        UI.toast('Agent removed');
+      }
+
+      function openProfile(name) {
+        localStorage.setItem('selected_agent', decodeURIComponent(name));
+        location.href = '../ai-agent-profile/index.html';
+      }
+
+      UI.$('#add').onclick = () => {
+        const name = window.prompt('Agent name', 'New Agent');
+        if (!name || !name.trim()) {
+          return;
+        }
+
+        data.unshift({
+          name: name.trim(),
+          status: 'Online',
+          model: 'GPT-5.6',
+          success: 100
+        });
+
+        UI.save(key, data);
+        render();
+        UI.toast('Agent created');
+      };
+
+      UI.$('#search').oninput = render;
+      UI.$('#filter').onchange = render;
+      render();
+    </script>
+  </body>
+</html>
+
